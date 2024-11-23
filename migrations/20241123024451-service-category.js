@@ -3,33 +3,25 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Organizations", {
+    await queryInterface.createTable("ServiceCategories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      organizationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Organizations", key: "id" },
+        onDelete: "CASCADE",
+      },
       name: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
       description: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      organizationTypeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "OrganizationTypes",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
-      address: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(500),
         allowNull: true,
       },
       createdAt: {
@@ -43,9 +35,12 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+
+    await queryInterface.addIndex("ServiceCategories", ["organizationId"]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Organizations");
+    await queryInterface.removeIndex("ServiceCategories", ["organizationId"]);
+    await queryInterface.dropTable("ServiceCategories");
   },
 };

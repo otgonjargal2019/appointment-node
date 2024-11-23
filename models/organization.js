@@ -8,6 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "organizationTypeId",
         as: "organizationType",
       });
+
+      this.hasMany(models.Rank, {
+        foreignKey: "organizationId",
+        as: "ranks",
+        onDelete: "CASCADE",
+      });
     }
   }
 

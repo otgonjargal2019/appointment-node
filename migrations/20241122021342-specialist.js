@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("SocialAuths", {
+    await queryInterface.createTable("Specialists", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,38 +19,56 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      provider: {
+      organizationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Organizations",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+      },
+      rankId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "Ranks",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+      },
+      firstname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      providerId: {
+      lastname: { type: Sequelize.STRING, allowNull: false },
+      position: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "Unspecified",
+      },
+      phoneNumber: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: true,
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-    });
-
-    await queryInterface.addConstraint("SocialAuths", {
-      fields: ["provider", "providerId"],
-      type: "unique",
-      name: "unique_provider_providerId",
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("SocialAuths");
+    await queryInterface.dropTable("Specialists");
   },
 };

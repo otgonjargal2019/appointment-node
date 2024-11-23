@@ -2,55 +2,120 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { OAuth2Client } = require("google-auth-library");
+const axios = require("axios");
+require("dotenv").config();
 const db = require("../models");
 
 const router = express.Router();
 const secretKey = require("../middleware/verifyToken").secretKey;
 const client = new OAuth2Client("YOUR_GOOGLE_CLIENT_ID");
 
-router.post("/auth/google", async (req, res) => {
-  console.log("auth google duudagdav");
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;
 
-  const { idToken } = req.body;
+router.post("/facebook", async (req, res) => {
+  const { provider, providerId, email, accessToken } = req.body;
 
   try {
-    // Verify the ID token using Google Auth Library
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: "YOUR_GOOGLE_CLIENT_ID", // Specify the CLIENT_ID of the app that accesses the backend
+    const response = await axios.get(`https://graph.facebook.com/debug_token`, {
+      params: {
+        input_token: accessToken,
+        access_token: `${FACEBOOK_APP_ID}|${FACEBOOK_APP_SECRET}`,
+      },
     });
 
-    const payload = ticket.getPayload();
-    const userId = payload["sub"]; // Google user ID
+    const tokenData = response.data.data;
 
-    // Check if the user exists in your database
-    let user = await db.User.findOne({ where: { googleId: userId } });
+    if (!tokenData.is_valid) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
 
-    // If the user does not exist, create a new user
+    console.log("hariu irev:::", response.data);
+
+    let user = await db.User.findOne({ where: { email } });
+
     if (!user) {
       user = await db.User.create({
-        googleId: userId,
-        email: payload["email"],
-        name: payload["name"],
+        username: `fb_${providerId}`,
+        email,
       });
     }
 
-    // Create a JWT token for the user
-    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id, email: user.email }, secretKey, {
+      expiresIn: "1h",
+    });
 
-    // Respond with user information and the token
-    res.json({
-      token,
-      username: user.name,
-      email: user.email,
+    return res.status(200).json({ token, user });
+  } catch (err) {
+    console.error(`${err.message}`);
+    return res.status(500).json({
+      message: "Facebook authentication failed due to a Token -  auth-server.",
+    });
+  }
+});
+
+router.post("/google", async (req, res) => {
+  const { provider, providerId, email, otherUserInfo } = req.body;
+
+  if (!provider || !providerId || !email) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    let socialAuth = await db.SocialAuth.findOne({
+      where: { provider, providerId },
+      include: { model: db.User, as: "user" },
+    });
+
+    let user;
+
+    console.log("socialAuth>>>>>>>>>>>>>>>>>", socialAuth);
+
+    if (socialAuth) {
+      user = socialAuth.user;
+      console.log("user>>>>>>>>>>>>>>>>>>>>>>>", user);
+    } else {
+      user = await db.User.findOne({ where: { email } });
+
+      if (!user) {
+        user = await db.User.create({
+          username: otherUserInfo?.username || email.split("@")[0],
+          email,
+        });
+      }
+
+      socialAuth = await db.SocialAuth.create({
+        userId: user.id,
+        provider,
+        providerId,
+        email,
+      });
+    }
+
+    const accessToken = jwt.sign(
+      { id: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        provider: socialAuth.provider,
+      },
+      accessToken,
     });
   } catch (error) {
-    console.error("Error verifying Google ID token:", error);
-    res.status(400).json({ message: "Invalid Google ID token" });
+    console.error("Error in social auth:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 
 router.post("/signin", async (req, res) => {
+  console.log("sign in duudagdav???????????????????????");
   try {
     const { email, password } = req.body;
     const user = await db.User.findOne({ where: { email } });
