@@ -5,16 +5,14 @@ const port = 3000;
 
 const authRoutes = require("./routes/auth");
 const organizationRoutes = require("./routes/organization");
+const bannerRoutes = require("./routes/banner");
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to my Node.js app!");
-});
-
 app.use("/auth", authRoutes);
 app.use("/organization", organizationRoutes);
+app.use("/banner", bannerRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

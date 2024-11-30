@@ -19,14 +19,35 @@ module.exports = (sequelize, DataTypes) => {
 
   Organization.init(
     {
-      name: { type: DataTypes.STRING, allowNull: false },
-      description: { type: DataTypes.STRING, allowNull: true },
       organizationTypeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: { model: "OrganizationTypes", key: "id" },
       },
+      name: { type: DataTypes.STRING, allowNull: false },
+      description: { type: DataTypes.STRING, allowNull: true },
+      phoneNumber: { type: DataTypes.STRING, allowNull: false },
       address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      latitude: {
+        type: DataTypes.DECIMAL(10, 8),
+        allowNull: true,
+        validate: {
+          min: -90,
+          max: 90,
+        },
+      },
+      longitude: {
+        type: DataTypes.DECIMAL(11, 8),
+        allowNull: true,
+        validate: {
+          min: -180,
+          max: 180,
+        },
+      },
+      imageUrl: {
         type: DataTypes.STRING,
         allowNull: true,
       },

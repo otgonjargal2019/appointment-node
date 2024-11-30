@@ -7,7 +7,7 @@ require("dotenv").config();
 const db = require("../models");
 
 const router = express.Router();
-const secretKey = require("../middleware/verifyToken").secretKey;
+const secretKey = require("../middlewares/verifyToken").secretKey;
 const client = new OAuth2Client("YOUR_GOOGLE_CLIENT_ID");
 
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;

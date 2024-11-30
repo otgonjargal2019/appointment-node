@@ -3,24 +3,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("OrganizationTypes", {
+    await queryInterface.createTable("Banners", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
+      organizationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "Organizations", key: "id" },
+        onDelete: "CASCADE",
+      },
+      bannerType: {
+        type: Sequelize.ENUM("main", "trending"),
         allowNull: false,
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      imageUrl: {
-        type: Sequelize.STRING,
+      imageUrl: { type: Sequelize.STRING, allowNull: false },
+      startDate: { type: Sequelize.DATE, allowNull: false },
+      endDate: { type: Sequelize.DATE, allowNull: false },
+      isActive: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +42,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("OrganizationTypes");
+    await queryInterface.dropTable("Banners");
   },
 };

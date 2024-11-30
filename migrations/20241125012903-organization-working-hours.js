@@ -3,23 +3,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("OrganizationTypes", {
+    await queryInterface.createTable("OrganizationWorkingHours", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      organizationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Organizations",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+      },
+      dayOfWeek: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      openingTime: {
+        type: Sequelize.TIME,
+        allowNull: false,
       },
-      imageUrl: {
-        type: Sequelize.STRING,
+      closingTime: {
+        type: Sequelize.TIME,
         allowNull: false,
       },
       createdAt: {
@@ -33,9 +42,15 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+    await queryInterface.addIndex("OrganizationWorkingHours", [
+      "organizationId",
+    ]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("OrganizationTypes");
+    await queryInterface.removeIndex("OrganizationWorkingHours", [
+      "organizationId",
+    ]);
+    await queryInterface.dropTable("OrganizationWorkingHours");
   },
 };

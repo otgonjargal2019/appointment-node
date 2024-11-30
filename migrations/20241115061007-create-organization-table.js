@@ -28,7 +28,20 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
+      phoneNumber: { type: Sequelize.STRING, allowNull: false },
       address: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      latitude: {
+        type: Sequelize.DECIMAL(10, 8),
+        allowNull: true,
+      },
+      longitude: {
+        type: Sequelize.DECIMAL(11, 8),
+        allowNull: true,
+      },
+      imageUrl: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -43,9 +56,12 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+
+    await queryInterface.addIndex("Organizations", ["organizationTypeId"]);
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex("Organizations", ["organizationTypeId"]);
     await queryInterface.dropTable("Organizations");
   },
 };
