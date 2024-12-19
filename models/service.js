@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Service",
       timestamps: true,
-      paranoid: true,
+      //paranoid: true,
       indexes: [
         {
           fields: ["serviceCategoryId"],

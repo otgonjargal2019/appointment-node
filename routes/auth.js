@@ -30,8 +30,6 @@ router.post("/facebook", async (req, res) => {
       return res.status(401).json({ message: "Invalid or expired token" });
     }
 
-    console.log("hariu irev:::", response.data);
-
     let user = await db.User.findOne({ where: { email } });
 
     if (!user) {
@@ -69,11 +67,8 @@ router.post("/google", async (req, res) => {
 
     let user;
 
-    console.log("socialAuth>>>>>>>>>>>>>>>>>", socialAuth);
-
     if (socialAuth) {
       user = socialAuth.user;
-      console.log("user>>>>>>>>>>>>>>>>>>>>>>>", user);
     } else {
       user = await db.User.findOne({ where: { email } });
 
@@ -115,7 +110,6 @@ router.post("/google", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  console.log("sign in duudagdav???????????????????????");
   try {
     const { email, password } = req.body;
     const user = await db.User.findOne({ where: { email } });
@@ -144,12 +138,13 @@ router.post("/signin", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, phoneNumber } = req.body;
 
     const newUser = await db.User.create({
       username,
       email,
       password,
+      phoneNumber,
     });
 
     res.status(201).json(newUser);

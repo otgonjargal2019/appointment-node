@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "ranks",
         onDelete: "CASCADE",
       });
+
+      this.hasMany(models.OrganizationWorkingHours, {
+        foreignKey: "organizationId",
+        as: "workingHours",
+        onDelete: "CASCADE",
+      });
     }
   }
 

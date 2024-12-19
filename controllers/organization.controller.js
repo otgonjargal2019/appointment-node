@@ -1,5 +1,12 @@
-const db = require("../models");
+const { Organization, OrganizationType } = require("../models");
 const { Op } = require("sequelize");
+const { getAverageRatingForOrganization } = require("./feedback.controller");
+const { getClosingTime } = require("./organizationWoorkingHours.controller");
+const { getLikeCountForOrganization } = require("./like.controller");
+const {
+  getServicesOfOrganization,
+  getServiceCategoriesWithServicesForOrganization,
+} = require("./service.controller");
 
 const toRadians = (degrees) => degrees * (Math.PI / 180);
 
@@ -19,12 +26,12 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 module.exports = {
   async getBusinessTypes(req, res) {
-    const organizationTypes = await db.OrganizationType.findAll();
+    const organizationTypes = await OrganizationType.findAll();
     return res.status(200).json(organizationTypes);
   },
 
   async getAllOrganizations(req, res) {
-    const list = await db.Organization.findAll();
+    const list = await Organization.findAll();
     return res.status(200).json(list);
   },
 
@@ -33,13 +40,31 @@ module.exports = {
     tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
     const now = new Date();
 
-    const list = await db.Organization.findAll({
+    const list = await Organization.findAll({
       where: {
         createdAt: {
           [Op.between]: [tenDaysAgo, now],
         },
       },
+      include: [
+        {
+          model: OrganizationType,
+          as: "organizationType",
+          required: false,
+        },
+      ],
     });
+    // console.log("Organization length::", list.length);
+    // list.forEach((org) => {
+    //   console.log("Organization >>>>", {
+    //     id: org.id,
+    //     name: org.name,
+    //     description: org.description,
+    //     imageUrl: org.imageUrl,
+    //     createdAt: org.createdAt,
+    //   });
+    //   console.log("ralation:", org.organizationType);
+    // });
     return res.status(200).json(list);
   },
 
@@ -52,7 +77,7 @@ module.exports = {
         .json({ error: "Latitude and longitude are required." });
     }
 
-    const allOrganizations = await db.Organization.findAll();
+    const allOrganizations = await Organization.findAll();
 
     const nearbyOrganizations = allOrganizations.filter((org) => {
       if (org.latitude && org.longitude) {
@@ -68,5 +93,32 @@ module.exports = {
     });
 
     return res.status(200).json(nearbyOrganizations);
+  },
+
+  async getOrganizationDetail(req, res) {
+    try {
+      const organizationId = req.params.organizationId;
+
+      const averageRating = await getAverageRatingForOrganization(
+        organizationId
+      );
+
+      const closingTime = await getClosingTime(organizationId);
+      const likeCount = await getLikeCountForOrganization(organizationId);
+      const services = await getServicesOfOrganization(organizationId);
+      const serviceCategory =
+        await getServiceCategoriesWithServicesForOrganization(organizationId);
+
+      return res.json({
+        averageRating,
+        closingTime,
+        likeCount,
+        services,
+        serviceCategory,
+      });
+    } catch (error) {
+      console.error("Error in getOrganizationDetail:", error);
+      return res.status(500).json({ error: "An error occurred." });
+    }
   },
 };

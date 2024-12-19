@@ -34,4 +34,12 @@ router.get(
   )
 );
 
+router.get(
+  "/:organizationId/details",
+  asyncHandler(
+    organizationsController.getOrganizationDetail,
+    organizationsController
+  )
+);
+
 module.exports = router;

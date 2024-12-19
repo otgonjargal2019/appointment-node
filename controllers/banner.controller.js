@@ -1,4 +1,4 @@
-const db = require("../models");
+const { Banner } = require("../models");
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     const tenDaysFromToday = new Date();
     tenDaysFromToday.setDate(currentDate.getDate() + 10);
 
-    const banners = await db.Banner.findAll({
+    const banners = await Banner.findAll({
       where: {
         isActive: true,
         bannerType: "main",
@@ -28,7 +28,7 @@ module.exports = {
     const tenDaysFromToday = new Date();
     tenDaysFromToday.setDate(currentDate.getDate() + 10);
 
-    const banners = await db.Banner.findAll({
+    const banners = await Banner.findAll({
       where: {
         isActive: true,
         bannerType: "trending",
