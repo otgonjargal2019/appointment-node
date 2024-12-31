@@ -54,17 +54,7 @@ module.exports = {
         },
       ],
     });
-    // console.log("Organization length::", list.length);
-    // list.forEach((org) => {
-    //   console.log("Organization >>>>", {
-    //     id: org.id,
-    //     name: org.name,
-    //     description: org.description,
-    //     imageUrl: org.imageUrl,
-    //     createdAt: org.createdAt,
-    //   });
-    //   console.log("ralation:", org.organizationType);
-    // });
+
     return res.status(200).json(list);
   },
 

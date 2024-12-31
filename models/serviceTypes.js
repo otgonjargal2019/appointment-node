@@ -2,17 +2,24 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class ServiceCategory extends Model {
+  class ServiceTypes extends Model {
     static associate(models) {
-      this.hasMany(models.Service, {
-        foreignKey: "serviceCategoryId",
-        as: "services",
+      this.belongsTo(models.Organization, {
+        foreignKey: "organizationId",
+        as: "organization",
+        onDelete: "CASCADE",
       });
     }
   }
 
-  ServiceCategory.init(
+  ServiceTypes.init(
     {
+      organizationId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "Organizations", key: "id" },
+        onDelete: "CASCADE",
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "ServiceCategory",
+      modelName: "ServiceTypes",
       timestamps: true,
     }
   );
 
-  return ServiceCategory;
+  return ServiceTypes;
 };

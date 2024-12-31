@@ -3,12 +3,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("SpecialistWorkingHours", {
+    await queryInterface.createTable("Professionals", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
       organizationId: {
         type: Sequelize.INTEGER,
@@ -19,24 +28,37 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      specialistId: {
+      rankId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: "Specialists", key: "id" },
-        onDelete: "CASCADE",
+        allowNull: true,
+        references: {
+          model: "Ranks",
+          key: "id",
+        },
+        onDelete: "SET NULL",
       },
-      dayOfWeek: {
+      firstname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      openingTime: {
-        type: Sequelize.TIME,
+      lastname: { type: Sequelize.STRING, allowNull: false },
+      position: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Unspecified",
+      },
+      imageUrl: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      closingTime: {
-        type: Sequelize.TIME,
-        allowNull: false,
-      },
+      // phoneNumber: {
+      //   type: Sequelize.STRING,
+      //   allowNull: true,
+      // },
+      // email: {
+      //   type: Sequelize.STRING,
+      //   allowNull: true,
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -51,6 +73,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("SpecialistWorkingHours");
+    await queryInterface.dropTable("Professionals");
   },
 };

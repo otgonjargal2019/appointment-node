@@ -3,21 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Specialists", {
+    await queryInterface.createTable("ProfessionalWorkingHours", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
       },
       organizationId: {
         type: Sequelize.INTEGER,
@@ -28,32 +19,23 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      rankId: {
+      professionalId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "Ranks",
-          key: "id",
-        },
-        onDelete: "SET NULL",
+        allowNull: false,
+        references: { model: "Professionals", key: "id" },
+        onDelete: "CASCADE",
       },
-      firstname: {
+      dayOfWeek: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      lastname: { type: Sequelize.STRING, allowNull: false },
-      position: {
-        type: Sequelize.STRING,
+      openingTime: {
+        type: Sequelize.TIME,
         allowNull: false,
-        defaultValue: "Unspecified",
       },
-      phoneNumber: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      closingTime: {
+        type: Sequelize.TIME,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -69,6 +51,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Specialists");
+    await queryInterface.dropTable("ProfessionalWorkingHours");
   },
 };

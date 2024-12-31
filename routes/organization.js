@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const asyncHandler = require("../middlewares/asyncHandler");
 const organizationsController = require("../controllers/organization.controller");
+const specialistController = require("../controllers/specialist.controller");
+const specialistServicesController = require("../controllers/specialistServices.controller");
 
 router.get(
   "/types",
@@ -39,6 +41,22 @@ router.get(
   asyncHandler(
     organizationsController.getOrganizationDetail,
     organizationsController
+  )
+);
+
+router.get(
+  "/:organizationId/specialists",
+  asyncHandler(
+    specialistController.getSpecialistsByOrganization,
+    specialistController
+  )
+);
+
+router.get(
+  "/:organizationId/:specialistId/services",
+  asyncHandler(
+    specialistServicesController.getSpecialistServices,
+    specialistServicesController
   )
 );
 

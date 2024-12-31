@@ -2,7 +2,7 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Specialist extends Model {
+  class Professional extends Model {
     static associate(models) {
       this.belongsTo(models.User, {
         foreignKey: "userId",
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Specialist.init(
+  Professional.init(
     {
       userId: {
         type: DataTypes.INTEGER,
@@ -61,26 +61,30 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: "Unspecified",
       },
-      phoneNumber: {
+      imageUrl: {
         type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-          is: /^[0-9\-+() ]*$/,
-        },
+        allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-          isEmail: true,
-        },
-      },
+      // phoneNumber: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      //   validate: {
+      //     is: /^[0-9\-+() ]*$/,
+      //   },
+      // },
+      // email: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      //   validate: {
+      //     isEmail: true,
+      //   },
+      // },
     },
     {
       sequelize,
-      modelName: "Specialist",
+      modelName: "Professional",
     }
   );
 
-  return Specialist;
+  return Professional;
 };

@@ -3,10 +3,18 @@ const { ServiceCategory, Service } = require("../models");
 async function getServiceCategoriesWithServicesForOrganization(organizationId) {
   try {
     const categories = await ServiceCategory.findAll({
+      attributes: ["id", "name"],
       include: [
         {
           model: Service,
           as: "services",
+          attributes: [
+            "serviceCategoryId",
+            "name",
+            "description",
+            "price",
+            "duration",
+          ],
           where: { organizationId },
           required: true,
         },
