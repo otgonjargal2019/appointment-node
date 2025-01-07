@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Organizations", {
+    await queryInterface.createTable("Businesses", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,11 +18,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      organizationTypeId: {
+      businessTypeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "OrganizationTypes",
+          model: "BusinessTypes",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -57,11 +57,11 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex("Organizations", ["organizationTypeId"]);
+    await queryInterface.addIndex("Businesses", ["businessTypeId"]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeIndex("Organizations", ["organizationTypeId"]);
-    await queryInterface.dropTable("Organizations");
+    await queryInterface.removeIndex("Businesses", ["businessTypeId"]);
+    await queryInterface.dropTable("Businesses");
   },
 };

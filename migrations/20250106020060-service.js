@@ -10,10 +10,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      organizationId: {
+      businessId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
+        references: { model: "Businesses", key: "id" },
         onDelete: "CASCADE",
       },
       parentServiceId: {
@@ -26,6 +26,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: "ServiceTypes", key: "id" },
+        onDelete: "CASCADE",
+      },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "ServiceCategories", key: "id" },
         onDelete: "CASCADE",
       },
       isFeatured: {
@@ -41,28 +47,19 @@ module.exports = {
         type: Sequelize.STRING(500),
         allowNull: true,
       },
-      isPriceFixed: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
-      price: {
-        type: Sequelize.BIGINT,
-        allowNull: true,
-      },
-      minPrice: { type: Sequelize.BIGINT, allowNull: true },
-      maxPrice: { type: Sequelize.BIGINT, allowNull: true },
-      isDurationFixed: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
-      },
       duration: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      priceType: {
+        type: Sequelize.ENUM("Free", "From", "Fixed"),
+        allowNull: false,
+        defaultValue: "Fixed",
+      },
+      price: {
+        type: Sequelize.DECIMAL(15),
         allowNull: true,
       },
-      minDuration: { type: Sequelize.INTEGER, allowNull: true },
-      maxDuration: { type: Sequelize.INTEGER, allowNull: true },
       isActive: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -81,13 +78,13 @@ module.exports = {
     });
 
     await queryInterface.addIndex("Services", ["serviceTypeId"]);
-    await queryInterface.addIndex("Services", ["organizationId"]);
+    await queryInterface.addIndex("Services", ["businessId"]);
     await queryInterface.addIndex("Services", ["parentServiceId"]);
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.removeIndex("Services", ["serviceTypeId"]);
-    await queryInterface.removeIndex("Services", ["organizationId"]);
+    await queryInterface.removeIndex("Services", ["businessId"]);
     await queryInterface.removeIndex("Services", ["parentServiceId"]);
 
     await queryInterface.dropTable("Services");

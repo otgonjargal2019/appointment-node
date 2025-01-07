@@ -2,16 +2,16 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class OrganizationType extends Model {
+  class BusinessType extends Model {
     static associate(models) {
-      this.hasMany(models.Organization, {
-        foreignKey: "organizationTypeId",
-        as: "organizations",
+      this.hasMany(models.Business, {
+        foreignKey: "businessTypeId",
+        as: "businesses",
       });
     }
   }
 
-  OrganizationType.init(
+  BusinessType.init(
     {
       name: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: true },
@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "OrganizationType",
+      modelName: "BusinessType",
     }
   );
 
-  return OrganizationType;
+  return BusinessType;
 };

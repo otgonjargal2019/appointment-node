@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
 
@@ -29,18 +29,14 @@ module.exports = (sequelize, DataTypes) => {
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Users", key: "id" },
       },
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
       },
       rankId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Ranks", key: "id" },
-        onDelete: "SET NULL",
       },
       firstname: {
         type: DataTypes.STRING,
@@ -65,20 +61,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      // phoneNumber: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      //   validate: {
-      //     is: /^[0-9\-+() ]*$/,
-      //   },
-      // },
-      // email: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      //   validate: {
-      //     isEmail: true,
-      //   },
-      // },
     },
     {
       sequelize,

@@ -2,16 +2,23 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Rank extends Model {
+  class ServiceCategory extends Model {
     static associate(models) {
       this.belongsTo(models.Business, {
         foreignKey: "businessId",
         as: "business",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(models.ServiceCategoryTranslation, {
+        foreignKey: "serviceCategoryId",
+        as: "translations",
+        onDelete: "CASCADE",
       });
     }
   }
 
-  Rank.init(
+  ServiceCategory.init(
     {
       businessId: {
         type: DataTypes.INTEGER,
@@ -22,14 +29,23 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: true,
+          len: [1, 255],
+        },
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          len: [1, 500],
         },
       },
     },
     {
       sequelize,
-      modelName: "Rank",
+      modelName: "ServiceCategory",
+      timestamps: true,
     }
   );
 
-  return Rank;
+  return ServiceCategory;
 };

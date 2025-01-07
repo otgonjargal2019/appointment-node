@@ -22,10 +22,10 @@ module.exports = {
         references: { model: "Services", key: "id" },
         onDelete: "CASCADE",
       },
-      organizationId: {
+      businessId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
+        references: { model: "Businesses", key: "id" },
         onDelete: "CASCADE",
       },
       createdAt: {
@@ -42,7 +42,7 @@ module.exports = {
 
     await queryInterface.addIndex("ProfessionalServices", ["professionalId"]);
     await queryInterface.addIndex("ProfessionalServices", ["serviceId"]);
-    await queryInterface.addIndex("ProfessionalServices", ["organizationId"]);
+    await queryInterface.addIndex("ProfessionalServices", ["businessId"]);
   },
 
   async down(queryInterface, Sequelize) {
@@ -50,9 +50,7 @@ module.exports = {
       "professionalId",
     ]);
     await queryInterface.removeIndex("ProfessionalServices", ["serviceId"]);
-    await queryInterface.removeIndex("ProfessionalServices", [
-      "organizationId",
-    ]);
+    await queryInterface.removeIndex("ProfessionalServices", ["businessId"]);
 
     await queryInterface.dropTable("ProfessionalServices");
   },

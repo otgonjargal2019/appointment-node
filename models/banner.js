@@ -4,9 +4,9 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Banner extends Model {
     static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
     }
@@ -14,10 +14,9 @@ module.exports = (sequelize, DataTypes) => {
 
   Banner.init(
     {
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
       },
       bannerType: {
         type: DataTypes.ENUM("main", "trending"),

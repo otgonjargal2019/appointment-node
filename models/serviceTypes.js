@@ -3,23 +3,11 @@ const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class ServiceTypes extends Model {
-    static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
-        onDelete: "CASCADE",
-      });
-    }
+    static associate(models) {}
   }
 
   ServiceTypes.init(
     {
-      organizationId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: { model: "Organizations", key: "id" },
-        onDelete: "CASCADE",
-      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -28,12 +16,24 @@ module.exports = (sequelize, DataTypes) => {
           len: [1, 255],
         },
       },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-          len: [0, 500],
-        },
+      type: {
+        type: DataTypes.ENUM(
+          "barbering",
+          "body",
+          "counseling&holistic",
+          "eyebrows&eyelashes",
+          "facials&skincare",
+          "fitness",
+          "hair removal",
+          "hair&styling",
+          "injectables&fillers",
+          "makeup",
+          "massage",
+          "medical&dental",
+          "nails",
+          "tattoo&piercing"
+        ),
+        allowNull: false,
       },
     },
     {

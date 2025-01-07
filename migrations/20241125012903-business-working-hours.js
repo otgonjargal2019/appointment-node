@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("ProfessionalWorkingHours", {
+    await queryInterface.createTable("BusinessWorkingHours", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,12 +17,6 @@ module.exports = {
           model: "Businesses",
           key: "id",
         },
-        onDelete: "CASCADE",
-      },
-      professionalId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: "Professionals", key: "id" },
         onDelete: "CASCADE",
       },
       dayOfWeek: {
@@ -48,9 +42,11 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+    await queryInterface.addIndex("BusinessWorkingHours", ["businessId"]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("ProfessionalWorkingHours");
+    await queryInterface.removeIndex("BusinessWorkingHours", ["businessId"]);
+    await queryInterface.dropTable("BusinessWorkingHours");
   },
 };

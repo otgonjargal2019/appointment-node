@@ -1,35 +1,31 @@
 "use strict";
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("OrganizationWorkingHours", {
+    await queryInterface.createTable("ServiceCategoryTranslations", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      organizationId: {
+      serviceCategoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: "Organizations",
-          key: "id",
-        },
+        references: { model: "ServiceCategories", key: "id" },
         onDelete: "CASCADE",
       },
-      dayOfWeek: {
-        type: Sequelize.STRING,
+      language: {
+        type: Sequelize.STRING(5),
         allowNull: false,
       },
-      openingTime: {
-        type: Sequelize.TIME,
+      name: {
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
-      closingTime: {
-        type: Sequelize.TIME,
-        allowNull: false,
+      description: {
+        type: Sequelize.STRING(500),
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -42,15 +38,9 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
-    await queryInterface.addIndex("OrganizationWorkingHours", [
-      "organizationId",
-    ]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeIndex("OrganizationWorkingHours", [
-      "organizationId",
-    ]);
-    await queryInterface.dropTable("OrganizationWorkingHours");
+    await queryInterface.dropTable("ServiceCategoryTranslations");
   },
 };

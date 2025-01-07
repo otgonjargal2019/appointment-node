@@ -4,9 +4,9 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Like extends Model {
     static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
       this.belongsTo(models.User, {
@@ -19,15 +19,13 @@ module.exports = (sequelize, DataTypes) => {
 
   Like.init(
     {
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
       },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Users", key: "id" },
       },
       isLiked: {
         type: DataTypes.BOOLEAN,
@@ -42,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       indexes: [
         {
           unique: true,
-          fields: ["organizationId", "userId"],
+          fields: ["businessId", "userId"],
         },
       ],
     }

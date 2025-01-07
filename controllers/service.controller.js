@@ -1,37 +1,38 @@
-const { ServiceCategory, Service } = require("../models");
+const { ServiceTypes, Service } = require("../models");
 
-async function getServiceCategoriesWithServicesForOrganization(organizationId) {
+async function getServiceTypesWithServices(businessId) {
   try {
-    const categories = await ServiceCategory.findAll({
+    const types = await ServiceTypes.findAll({
       attributes: ["id", "name"],
       include: [
         {
           model: Service,
           as: "services",
           attributes: [
-            "serviceCategoryId",
+            "serviceTypeId",
             "name",
             "description",
             "price",
             "duration",
           ],
-          where: { organizationId },
+          where: { businessId },
           required: true,
         },
       ],
     });
+    console.log("categories::::::", types);
 
-    return categories;
+    return types;
   } catch (error) {
     console.error("Error fetching service categories with services:", error);
     throw error;
   }
 }
 
-async function getServicesOfOrganization(organizationId) {
+async function getServicesOfBusiness(businessId) {
   try {
     const list = await Service.findAll({
-      where: { organizationId },
+      where: { businessId },
     });
 
     return list;
@@ -42,6 +43,6 @@ async function getServicesOfOrganization(organizationId) {
 }
 
 module.exports = {
-  getServicesOfOrganization,
-  getServiceCategoriesWithServicesForOrganization,
+  getServicesOfBusiness,
+  getServiceTypesWithServices,
 };

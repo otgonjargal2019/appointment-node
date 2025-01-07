@@ -19,11 +19,11 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      organizationId: {
+      businessId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Organizations",
+          model: "Businesses",
           key: "id",
         },
         onDelete: "CASCADE",
@@ -51,14 +51,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // phoneNumber: {
-      //   type: Sequelize.STRING,
-      //   allowNull: true,
-      // },
-      // email: {
-      //   type: Sequelize.STRING,
-      //   allowNull: true,
-      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

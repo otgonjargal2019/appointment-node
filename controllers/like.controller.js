@@ -1,9 +1,9 @@
 const { Like } = require("../models");
 
-async function getLikeCountForOrganization(organizationId) {
+async function getLikeCountForBusiness(businessId) {
   try {
     const likeCount = await Like.count({
-      where: { organizationId },
+      where: { businessId },
       isLiked: true,
     });
 
@@ -14,4 +14,4 @@ async function getLikeCountForOrganization(organizationId) {
   }
 }
 
-module.exports = { getLikeCountForOrganization };
+module.exports = { getLikeCountForBusiness };

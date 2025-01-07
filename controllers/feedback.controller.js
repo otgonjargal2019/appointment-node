@@ -1,9 +1,9 @@
 const { sequelize, Feedback } = require("../models");
 
-async function getAverageRatingForOrganization(organizationId) {
+async function getAverageRatingForBusiness(businessId) {
   try {
     const result = await Feedback.findAll({
-      where: { organizationId },
+      where: { businessId },
       attributes: [
         [sequelize.fn("AVG", sequelize.col("rating")), "averageRating"],
       ],
@@ -20,10 +20,10 @@ async function getAverageRatingForOrganization(organizationId) {
   }
 }
 
-async function getUserRatingForOrganization(organizationId, userId) {
+async function getUserRatingForBusiness(businessId, userId) {
   try {
     const feedback = await Feedback.findOne({
-      where: { organizationId, userId },
+      where: { businessId, userId },
       attributes: ["rating"],
     });
 
@@ -31,7 +31,7 @@ async function getUserRatingForOrganization(organizationId, userId) {
       return feedback.rating;
     }
 
-    return null; // If the user hasn't left a rating, return null
+    return null;
   } catch (error) {
     console.error("Error fetching user rating:", error);
     throw error;
@@ -39,6 +39,6 @@ async function getUserRatingForOrganization(organizationId, userId) {
 }
 
 module.exports = {
-  getAverageRatingForOrganization,
-  getUserRatingForOrganization,
+  getAverageRatingForBusiness,
+  getUserRatingForBusiness,
 };

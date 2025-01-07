@@ -4,9 +4,9 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ProfessionalWorkingHours extends Model {
     static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
       this.belongsTo(models.Professional, {
@@ -19,17 +19,13 @@ module.exports = (sequelize, DataTypes) => {
 
   ProfessionalWorkingHours.init(
     {
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
-        onDelete: "CASCADE",
       },
       professionalId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Professionals", key: "id" },
-        onDelete: "CASCADE",
       },
       dayOfWeek: {
         type: DataTypes.STRING,

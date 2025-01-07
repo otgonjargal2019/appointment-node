@@ -1,11 +1,11 @@
-const { Organization, OrganizationType } = require("../models");
+const { Business, BusinessType } = require("../models");
 const { Op } = require("sequelize");
-const { getAverageRatingForOrganization } = require("./feedback.controller");
-const { getClosingTime } = require("./organizationWoorkingHours.controller");
-const { getLikeCountForOrganization } = require("./like.controller");
+//const { getAverageRatingForOrganization } = require("./feedback.controller");
+const { getClosingTime } = require("./businessWorkingHours.controller");
+const { getLikeCountForBusiness } = require("./like.controller");
 const {
-  getServicesOfOrganization,
-  getServiceCategoriesWithServicesForOrganization,
+  getServicesOfBusiness,
+  getServiceTypesWithServices,
 } = require("./service.controller");
 
 const toRadians = (degrees) => degrees * (Math.PI / 180);
@@ -26,21 +26,22 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 module.exports = {
   async getBusinessTypes(req, res) {
-    const organizationTypes = await OrganizationType.findAll();
-    return res.status(200).json(organizationTypes);
+    const businessTypes = await BusinessType.findAll();
+    return res.status(200).json(businessTypes);
   },
 
-  async getAllOrganizations(req, res) {
-    const list = await Organization.findAll();
+  async getAllBusinesses(req, res) {
+    const list = await Business.findAll();
     return res.status(200).json(list);
   },
 
-  async getNewlyJoinedOrganizations(req, res) {
+  async getNewlyJoinedBusinesses(req, res) {
     const tenDaysAgo = new Date();
-    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+    // tenDaysAgo.setDate(tenDaysAgo.getDate() - 10); original code shu dood mur 30 udruur bgaa shu
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 30);
     const now = new Date();
 
-    const list = await Organization.findAll({
+    const list = await Business.findAll({
       where: {
         createdAt: {
           [Op.between]: [tenDaysAgo, now],
@@ -48,8 +49,8 @@ module.exports = {
       },
       include: [
         {
-          model: OrganizationType,
-          as: "organizationType",
+          model: BusinessType,
+          as: "businessType",
           required: false,
         },
       ],
@@ -58,7 +59,7 @@ module.exports = {
     return res.status(200).json(list);
   },
 
-  async getNearbyOrganizations(req, res) {
+  async getNearbyBusinesses(req, res) {
     const { latitude, longitude, radius = 10 } = req.query;
 
     if (!latitude || !longitude) {
@@ -67,9 +68,9 @@ module.exports = {
         .json({ error: "Latitude and longitude are required." });
     }
 
-    const allOrganizations = await Organization.findAll();
+    const allBusinesses = await Business.findAll();
 
-    const nearbyOrganizations = allOrganizations.filter((org) => {
+    const nearbyBusinesses = allBusinesses.filter((org) => {
       if (org.latitude && org.longitude) {
         const distance = calculateDistance(
           parseFloat(latitude),
@@ -82,22 +83,19 @@ module.exports = {
       return false;
     });
 
-    return res.status(200).json(nearbyOrganizations);
+    return res.status(200).json(nearbyBusinesses);
   },
 
-  async getOrganizationDetail(req, res) {
+  async getBusinessDetail(req, res) {
     try {
-      const organizationId = req.params.organizationId;
+      const businessId = req.params.businessId;
 
-      const averageRating = await getAverageRatingForOrganization(
-        organizationId
-      );
+      const averageRating = await getAverageRatingForBusiness(businessId);
 
-      const closingTime = await getClosingTime(organizationId);
-      const likeCount = await getLikeCountForOrganization(organizationId);
-      const services = await getServicesOfOrganization(organizationId);
-      const serviceCategory =
-        await getServiceCategoriesWithServicesForOrganization(organizationId);
+      const closingTime = await getClosingTime(businessId);
+      const likeCount = await getLikeCountForBusiness(businessId);
+      const services = await getServicesOfBusiness(businessId);
+      const serviceCategory = await getServiceTypesWithServices(businessId);
 
       return res.json({
         averageRating,
@@ -107,7 +105,7 @@ module.exports = {
         serviceCategory,
       });
     } catch (error) {
-      console.error("Error in getOrganizationDetail:", error);
+      console.error("Error in getBusinessDetail:", error);
       return res.status(500).json({ error: "An error occurred." });
     }
   },

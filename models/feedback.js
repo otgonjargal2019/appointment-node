@@ -4,40 +4,34 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Feedback extends Model {
     static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
       });
       this.belongsTo(models.User, {
         foreignKey: "userId",
         as: "user",
       });
-      this.belongsTo(models.Specialist, {
-        foreignKey: "specialistId",
-        as: "specialist",
+      this.belongsTo(models.Professional, {
+        foreignKey: "professionalId",
+        as: "professional",
       });
     }
   }
 
   Feedback.init(
     {
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
-        onDelete: "CASCADE",
       },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Users", key: "id" },
-        onDelete: "CASCADE",
       },
-      specialistId: {
+      professionalId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Specialists", key: "id" },
-        onDelete: "CASCADE",
       },
       rating: {
         type: DataTypes.FLOAT,

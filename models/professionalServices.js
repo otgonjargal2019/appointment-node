@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
     }
@@ -29,20 +29,14 @@ module.exports = (sequelize, DataTypes) => {
       professionalId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Professionals", key: "id" },
-        onDelete: "CASCADE",
       },
       serviceId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Services", key: "id" },
-        onDelete: "CASCADE",
       },
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
-        onDelete: "CASCADE",
       },
     },
     {
@@ -57,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
           fields: ["serviceId"],
         },
         {
-          fields: ["organizationId"],
+          fields: ["businessId"],
         },
       ],
     }

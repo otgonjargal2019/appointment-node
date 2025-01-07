@@ -2,39 +2,38 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Organization extends Model {
+  class Business extends Model {
     static associate(models) {
-      this.belongsTo(models.OrganizationType, {
-        foreignKey: "organizationTypeId",
-        as: "organizationType",
+      this.belongsTo(models.BusinessType, {
+        foreignKey: "businessTypeId",
+        as: "businessType",
       });
 
       this.hasMany(models.Rank, {
-        foreignKey: "organizationId",
+        foreignKey: "businessId",
         as: "ranks",
         onDelete: "CASCADE",
       });
 
-      this.hasMany(models.OrganizationWorkingHours, {
-        foreignKey: "organizationId",
+      this.hasMany(models.BusinessWorkingHours, {
+        foreignKey: "businessId",
         as: "workingHours",
         onDelete: "CASCADE",
       });
 
-      this.hasMany(models.Specialist, {
-        foreignKey: "organizationId",
-        as: "specialists",
+      this.hasMany(models.Professional, {
+        foreignKey: "businessId",
+        as: "professionals",
         onDelete: "CASCADE",
       });
     }
   }
 
-  Organization.init(
+  Business.init(
     {
-      organizationTypeId: {
+      businessTypeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "OrganizationTypes", key: "id" },
       },
       name: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: true },
@@ -66,9 +65,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Organization",
+      modelName: "Business",
     }
   );
 
-  return Organization;
+  return Business;
 };

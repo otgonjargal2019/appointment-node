@@ -10,10 +10,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      organizationId: {
+      businessId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
+        references: { model: "Businesses", key: "id" },
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
@@ -41,9 +41,9 @@ module.exports = {
       },
     });
     await queryInterface.addConstraint("Likes", {
-      fields: ["organizationId", "userId"],
+      fields: ["businessId", "userId"],
       type: "unique",
-      name: "unique_organization_user_like",
+      name: "unique_business_user_like",
     });
   },
 

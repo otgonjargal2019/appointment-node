@@ -10,10 +10,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      organizationId: {
+      businessId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
+        references: { model: "Businesses", key: "id" },
         onDelete: "CASCADE",
       },
       bannerType: {

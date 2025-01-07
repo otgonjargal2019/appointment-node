@@ -2,23 +2,21 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class OrganizationWorkingHours extends Model {
+  class BusinessWorkingHours extends Model {
     static associate(models) {
-      this.belongsTo(models.Organization, {
-        foreignKey: "organizationId",
-        as: "organization",
+      this.belongsTo(models.Business, {
+        foreignKey: "businessId",
+        as: "business",
         onDelete: "CASCADE",
       });
     }
   }
 
-  OrganizationWorkingHours.init(
+  BusinessWorkingHours.init(
     {
-      organizationId: {
+      businessId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "Organizations", key: "id" },
-        onDelete: "CASCADE",
       },
       dayOfWeek: {
         type: DataTypes.STRING,
@@ -62,10 +60,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "OrganizationWorkingHours",
+      modelName: "BusinessWorkingHours",
       timestamps: true,
     }
   );
 
-  return OrganizationWorkingHours;
+  return BusinessWorkingHours;
 };
