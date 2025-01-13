@@ -3,7 +3,13 @@ const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class ServiceTypes extends Model {
-    static associate(models) {}
+    static associate(models) {
+      this.belongsTo(models.ServiceTypeCategory, {
+        foreignKey: "categoryId",
+        as: "category",
+        onDelete: "CASCADE",
+      });
+    }
   }
 
   ServiceTypes.init(
@@ -16,23 +22,8 @@ module.exports = (sequelize, DataTypes) => {
           len: [1, 255],
         },
       },
-      type: {
-        type: DataTypes.ENUM(
-          "barbering",
-          "body",
-          "counseling&holistic",
-          "eyebrows&eyelashes",
-          "facials&skincare",
-          "fitness",
-          "hair removal",
-          "hair&styling",
-          "injectables&fillers",
-          "makeup",
-          "massage",
-          "medical&dental",
-          "nails",
-          "tattoo&piercing"
-        ),
+      categoryId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

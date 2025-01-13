@@ -4,10 +4,10 @@ const businessController = require("../controllers/business.controller");
 const professionalController = require("../controllers/professional.controller");
 const professionalServicesController = require("../controllers/professionalServices.controller");
 
-router.get(
-  "/types",
-  asyncHandler(businessController.getBusinessTypes, businessController)
-);
+// router.get(
+//   "/types",
+//   asyncHandler(businessController.getBusinessTypes, businessController)
+// );
 
 router.get(
   "/all",

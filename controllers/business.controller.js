@@ -1,4 +1,4 @@
-const { Business, BusinessType } = require("../models");
+const { Business } = require("../models");
 const { Op } = require("sequelize");
 //const { getAverageRatingForOrganization } = require("./feedback.controller");
 const { getClosingTime } = require("./businessWorkingHours.controller");
@@ -25,10 +25,11 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 module.exports = {
-  async getBusinessTypes(req, res) {
-    const businessTypes = await BusinessType.findAll();
-    return res.status(200).json(businessTypes);
-  },
+  // async getBusinessTypes(req, res) {
+  //   const businessTypes = await BusinessType.findAll();
+  //   console.log("businessTypes:", businessTypes);
+  //   return res.status(200).json(businessTypes);
+  // },
 
   async getAllBusinesses(req, res) {
     const list = await Business.findAll();

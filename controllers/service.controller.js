@@ -1,4 +1,4 @@
-const { ServiceTypes, Service } = require("../models");
+const { ServiceTypes, Service, ServiceTypeCategory } = require("../models");
 
 async function getServiceTypesWithServices(businessId) {
   try {
@@ -42,7 +42,21 @@ async function getServicesOfBusiness(businessId) {
   }
 }
 
+async function getServiceTypeCategories(req, res) {
+  try {
+    const list = await ServiceTypeCategory.findAll({
+      attributes: ["id", "name", "imageUrl"],
+    });
+
+    return res.status(200).json(list);
+  } catch (error) {
+    console.error("Error fetching services of organization:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   getServicesOfBusiness,
   getServiceTypesWithServices,
+  getServiceTypeCategories,
 };

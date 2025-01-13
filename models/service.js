@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       duration: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         validate: {
           min: 5,
           max: 720,
@@ -85,8 +85,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       priceType: {
         type: DataTypes.ENUM("Free", "From", "Fixed"),
-        allowNull: false,
-        defaultValue: "Fixed",
+        allowNull: true,
+        // defaultValue: "Fixed",
       },
       price: {
         type: DataTypes.DECIMAL(15),

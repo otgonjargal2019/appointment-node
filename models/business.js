@@ -4,11 +4,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Business extends Model {
     static associate(models) {
-      this.belongsTo(models.BusinessType, {
-        foreignKey: "businessTypeId",
-        as: "businessType",
-      });
-
       this.hasMany(models.Rank, {
         foreignKey: "businessId",
         as: "ranks",
@@ -31,10 +26,6 @@ module.exports = (sequelize, DataTypes) => {
 
   Business.init(
     {
-      businessTypeId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       name: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: true },
       phoneNumber: { type: DataTypes.STRING, allowNull: false },

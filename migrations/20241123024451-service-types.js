@@ -14,24 +14,14 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
-      type: {
-        type: Sequelize.ENUM(
-          "barbering",
-          "body",
-          "counseling&holistic",
-          "eyebrows&eyelashes",
-          "facials&skincare",
-          "fitness",
-          "hair removal",
-          "hair&styling",
-          "injectables&fillers",
-          "makeup",
-          "massage",
-          "medical&dental",
-          "nails",
-          "tattoo&piercing"
-        ),
+      categoryId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "ServiceTypeCategories",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -44,12 +34,12 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
+
+    await queryInterface.addIndex("ServiceTypes", ["categoryId"]);
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex("ServiceTypes", ["categoryId"]);
     await queryInterface.dropTable("ServiceTypes");
-    await queryInterface.sequelize.query(
-      'DROP TYPE IF EXISTS "enum_ServiceTypes_type";'
-    );
   },
 };

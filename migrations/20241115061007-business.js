@@ -18,16 +18,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      businessTypeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "BusinessTypes",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
       phoneNumber: { type: Sequelize.STRING, allowNull: false },
       address: {
         type: Sequelize.STRING,
@@ -56,12 +46,9 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
-
-    await queryInterface.addIndex("Businesses", ["businessTypeId"]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeIndex("Businesses", ["businessTypeId"]);
     await queryInterface.dropTable("Businesses");
   },
 };

@@ -5,7 +5,7 @@ module.exports = {
   async getMain(req, res) {
     const currentDate = new Date();
     const tenDaysFromToday = new Date();
-    tenDaysFromToday.setDate(currentDate.getDate() + 10);
+    tenDaysFromToday.setDate(currentDate.getDate() - 10);
 
     const banners = await Banner.findAll({
       where: {
@@ -13,10 +13,11 @@ module.exports = {
         bannerType: "main",
         startDate: {
           [Op.lte]: currentDate,
+          [Op.gte]: tenDaysFromToday,
         },
         endDate: {
           [Op.gte]: currentDate,
-          [Op.lte]: tenDaysFromToday,
+          // [Op.lte]: tenDaysFromToday,
         },
       },
     });

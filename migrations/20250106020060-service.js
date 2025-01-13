@@ -49,12 +49,12 @@ module.exports = {
       },
       duration: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       priceType: {
         type: Sequelize.ENUM("Free", "From", "Fixed"),
-        allowNull: false,
-        defaultValue: "Fixed",
+        allowNull: true,
+        // defaultValue: "Fixed",
       },
       price: {
         type: Sequelize.DECIMAL(15),
